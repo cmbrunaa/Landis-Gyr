@@ -3,7 +3,7 @@
 <p align="center">
   <img src="docs/logo-uniopet.svg" height="120">
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="docs/logo-landisgyr.svg" height="120">
+  <img src="docs/logo-landisgyr.png" height="120">
 </p>
 
 <h1 align="center">
