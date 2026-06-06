@@ -1,9 +1,21 @@
 # Sistema de Validação Automática de Medidores – First-Off Landis+Gyr
 
 <p align="center">
-  <img src="docs/logo-uniopet.svg" width="180">
-  &nbsp;&nbsp;&nbsp;
-  <img src="docs/logo-landisgyr.png" width="180">
+  <img src="docs/logo-uniopet.svg" height="120">
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="docs/logo-landisgyr.svg" height="120">
+</p>
+
+<h1 align="center">
+Sistema de Validação Automática de Medidores
+</h1>
+
+<p align="center">
+First-Off Landis+Gyr
+</p>
+
+<p align="center">
+Projeto Integrador Extensionista • ADS • UniOpet
 </p>
 
 ---
