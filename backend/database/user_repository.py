@@ -68,3 +68,23 @@ def list_users():
     connection.close()
 
     return users
+
+def get_users():
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            id,
+            name,
+            username,
+            role
+        FROM users
+        ORDER BY id DESC
+    """)
+
+    users = cursor.fetchall()
+
+    connection.close()
+
+    return users
