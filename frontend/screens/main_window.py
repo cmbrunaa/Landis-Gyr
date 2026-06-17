@@ -70,11 +70,11 @@ class MainWindow(QMainWindow):
         layout.setContentsMargins(0, 28, 0, 20)
         layout.setSpacing(4)
 
-        logo = QLabel("Landis+Gyr")
+        logo = QLabel("Automatiza Landis+Gyr")
         logo.setAlignment(Qt.AlignCenter)
         logo.setStyleSheet("""
             color: #8CC63F;
-            font-size: 26px;
+            font-size: 20px;
             font-weight: bold;
             margin-bottom: 28px;
             border: none;
@@ -210,7 +210,7 @@ class MainWindow(QMainWindow):
 
         cards_layout.addWidget(self.create_card("Total de Validações", summary["total"], "▣"))
         cards_layout.addWidget(self.create_card("Confirmadas", summary["confirmed"], "✓"))
-        cards_layout.addWidget(self.create_card("Reprovadas", summary["reproved"], "✕"))
+        cards_layout.addWidget(self.create_card("Divergentes", summary["divergent"], "✕"))
         cards_layout.addWidget(self.create_card("Pendentes", summary["pending"], "!"))
 
         bottom_layout = QHBoxLayout()

@@ -98,28 +98,32 @@ def get_divergences(validation_id):
     return divergences
 
 def get_dashboard_summary():
+
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute("SELECT COUNT(*) FROM validations")
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM validations
+    """)
+
     total = cursor.fetchone()[0]
 
-    cursor.execute("SELECT COUNT(*) FROM validations WHERE status = 'CONFIRMADO'")
-    confirmed = cursor.fetchone()[0]
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM validations
+        WHERE status='FINALIZADO'
+    """)
 
-    cursor.execute("SELECT COUNT(*) FROM validations WHERE status = 'REPROVADO'")
-    reproved = cursor.fetchone()[0]
-
-    cursor.execute("SELECT COUNT(*) FROM validations WHERE status = 'PENDENTE'")
-    pending = cursor.fetchone()[0]
+    finalized = cursor.fetchone()[0]
 
     connection.close()
 
     return {
         "total": total,
-        "confirmed": confirmed,
-        "reproved": reproved,
-        "pending": pending
+        "confirmed": finalized,
+        "divergent": 0,
+        "pending": 0
     }
 
 def get_validations_by_operator():

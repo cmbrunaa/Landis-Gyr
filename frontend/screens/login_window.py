@@ -40,7 +40,7 @@ class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Login - First-Off Landis+Gyr")
+        self.setWindowTitle("Login - First-Off Automatiza Landis+Gyr")
         self.resize(1400, 800)
         self.setStyleSheet(LOGIN_STYLE)
         self.main_window = None

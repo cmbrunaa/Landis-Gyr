@@ -224,3 +224,11 @@ Curso de Análise e Desenvolvimento de Sistemas
 # Observação
 
 Este projeto possui caráter acadêmico e foi desenvolvido exclusivamente para fins educacionais dentro da disciplina de Projeto Integrador Extensionista.
+
+# Rodando o projeto
+
+1- Abra o terminal e instale "py -m pip install PySide6"
+
+2- Instale também "py -m pip install bcrypt"
+
+3- Rode o projeto na main "python frontend/main.py"

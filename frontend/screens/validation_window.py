@@ -1,4 +1,4 @@
-from datetime import datetime
+from frontend.screens.validation_review_window import ValidationReviewWindow
 
 from PySide6.QtWidgets import (
     QWidget,
@@ -12,10 +12,9 @@ from PySide6.QtWidgets import (
 from services.xml_reader import read_xml
 from services.validator import validate_parameters
 
-from database.validation_repository import save_validation, save_divergences
-
 
 class ValidationWindow(QWidget):
+
     def __init__(self, user, refresh_callback):
         super().__init__()
 
@@ -25,15 +24,23 @@ class ValidationWindow(QWidget):
         layout = QVBoxLayout(self)
 
         title = QLabel("Validação de XML")
+
         title.setStyleSheet("""
             font-size: 24px;
             font-weight: bold;
         """)
 
-        self.file_label = QLabel("Nenhum arquivo selecionado")
+        self.file_label = QLabel(
+            "Nenhum arquivo selecionado"
+        )
 
-        select_button = QPushButton("Selecionar XML")
-        select_button.clicked.connect(self.select_xml)
+        select_button = QPushButton(
+            "Selecionar XML"
+        )
+
+        select_button.clicked.connect(
+            self.select_xml
+        )
 
         layout.addWidget(title)
         layout.addWidget(self.file_label)
@@ -41,8 +48,12 @@ class ValidationWindow(QWidget):
         layout.addStretch()
 
     def select_xml(self):
+
         file_path, _ = QFileDialog.getOpenFileName(
-            self, "Selecionar XML", "", "Arquivos XML (*.xml *.txt)"
+            self,
+            "Selecionar XML",
+            "",
+            "Arquivos XML (*.xml *.txt)"
         )
 
         if not file_path:
@@ -53,30 +64,23 @@ class ValidationWindow(QWidget):
         try:
             xml_data = read_xml(file_path)
 
-            validation = validate_parameters(xml_data)
-
-            meter_model = xml_data.get("MODELO_MEDIDOR", {}).get("value", "")
-
-            meter_type = xml_data.get("TIPO_MEDIDOR", {}).get("value", "")
-
-            validation_id = save_validation(
-                status=validation["final_status"],
-                meter_model=meter_model,
-                meter_type=meter_type,
-                operator_name=self.user["name"],
-                created_at=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            validation = validate_parameters(
+                xml_data
             )
 
-            save_divergences(validation_id, validation["divergences"])
-
-            QMessageBox.information(
-                self,
-                "Validação concluída",
-                f"Status: {validation['final_status']}\n\nID: {validation_id}",
+            self.review_window = ValidationReviewWindow(
+                user=self.user,
+                validation=validation,
+                xml_data=xml_data,
+                refresh_callback=self.refresh_callback
             )
 
-            self.refresh_callback()
-            self.close()
+            self.review_window.show()
+            self.hide()
 
         except Exception as error:
-            QMessageBox.critical(self, "Erro", str(error))
+            QMessageBox.critical(
+                self,
+                "Erro",
+                str(error)
+            )
