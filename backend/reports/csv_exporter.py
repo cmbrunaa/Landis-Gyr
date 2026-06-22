@@ -1,28 +1,39 @@
 import csv
-import os
+from pathlib import Path
 
 from database.validation_repository import get_validations
 
 
 def export_validations_to_csv():
+
     validations = get_validations()
 
-    os.makedirs("../exports", exist_ok=True)
+    exports_dir = Path("exports")
+    exports_dir.mkdir(exist_ok=True)
 
-    file_path = "../exports/historico_validacoes.csv"
+    file_path = exports_dir / "historico_validacoes.csv"
 
-    with open(file_path, mode="w", newline="", encoding="utf-8") as file:
-        writer = csv.writer(file)
+    with open(
+        file_path,
+        mode="w",
+        newline="",
+        encoding="utf-8-sig"
+    ) as file:
+
+        writer = csv.writer(file, delimiter=";")
 
         writer.writerow([
             "ID",
             "Status",
             "Modelo do Medidor",
             "Tipo do Medidor",
+            "Operador",
             "Data"
         ])
 
         for validation in validations:
             writer.writerow(validation)
 
-    return file_path
+    print(f"CSV gerado em: {file_path.resolve()}")
+
+    return str(file_path.resolve())

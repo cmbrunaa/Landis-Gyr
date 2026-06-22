@@ -46,5 +46,18 @@ def create_tables():
         )
     """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS validation_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            validation_id INTEGER NOT NULL,
+            parameter TEXT NOT NULL,
+            expected TEXT,
+            found TEXT,
+            status TEXT NOT NULL,
+            message TEXT,
+            FOREIGN KEY (validation_id) REFERENCES validations(id)
+        )
+    """)
+
     connection.commit()
     connection.close()

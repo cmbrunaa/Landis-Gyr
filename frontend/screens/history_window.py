@@ -40,7 +40,7 @@ class HistoryWindow(QWidget):
 
         title = QLabel("Histórico de Validações")
         title.setStyleSheet("""
-            font-size: 30px;
+            font-size: 26px;
             font-weight: bold;
             color: #111827;
             border: none;
@@ -94,7 +94,7 @@ class HistoryWindow(QWidget):
     def create_filters(self):
         panel = QFrame()
 
-        panel.setFixedHeight(58)
+        panel.setFixedHeight(64)
         panel.setStyleSheet("""
             QFrame {
                 background-color: white;
@@ -111,7 +111,7 @@ class HistoryWindow(QWidget):
         self.search_input.setPlaceholderText(
             "Buscar por modelo, tipo, operador ou data..."
         )
-        self.search_input.setFixedHeight(40)
+        self.search_input.setFixedHeight(44)
         self.search_input.setStyleSheet("""
             QLineEdit {
                 background-color: #F9FAFB;
@@ -130,9 +130,10 @@ class HistoryWindow(QWidget):
 
         self.status_filter = QComboBox()
         self.status_filter.addItems(
-            ["Todos", "CONFIRMADO", "REPROVADO", "PENDENTE"]
+            ["Todos", "CONFIRMADO", "DIVERGENTE", "PENDENTE"]
         )
-        self.status_filter.setFixedHeight(40)
+        self.status_filter.setFixedHeight(44)
+        clear_button.setFixedHeight(44)
         self.status_filter.setFixedWidth(160)
         self.status_filter.setStyleSheet("""
             QComboBox {
@@ -232,7 +233,7 @@ class HistoryWindow(QWidget):
         validations = self.get_filtered()
 
         self.total_label.setText(
-            f"{len(validations)} validações encontradas"
+            f"Total: {len(validations)}"
         )
 
         if not validations:

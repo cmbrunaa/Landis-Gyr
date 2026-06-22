@@ -26,16 +26,16 @@ class ValidationCard(QFrame):
         date = self.validation[5]
 
         color = "#16A34A"
-        icon = "✓"
+        background = "#ECFDF3"
 
-        if status == "REPROVADO":
+        if status == "DIVERGENTE":
             color = "#DC2626"
-            icon = "✕"
+            background = "#FEF2F2"
         elif status == "PENDENTE":
             color = "#D97706"
-            icon = "!"
+            background = "#FFF7ED"
 
-        self.setFixedHeight(82)
+        self.setFixedHeight(92)
         self.setStyleSheet(f"""
             QFrame {{
                 background-color: #FFFFFF;
@@ -48,8 +48,8 @@ class ValidationCard(QFrame):
         """)
 
         main_layout = QHBoxLayout(self)
-        main_layout.setContentsMargins(14, 10, 14, 10)
-        main_layout.setSpacing(12)
+        main_layout.setContentsMargins(16, 10, 16, 10)
+        main_layout.setSpacing(14)
 
         left_layout = QVBoxLayout()
         left_layout.setSpacing(4)
@@ -84,12 +84,12 @@ class ValidationCard(QFrame):
         right_layout.setSpacing(8)
         right_layout.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
-        badge = QLabel(f"{icon} {status}")
+        badge = QLabel(status)
         badge.setAlignment(Qt.AlignCenter)
-        badge.setFixedWidth(110)
+        badge.setFixedWidth(120)
         badge.setFixedHeight(26)
         badge.setStyleSheet(f"""
-            background-color: #ECFDF3;
+            background-color: {background};
             color: {color};
             border-radius: 13px;
             font-size: 11px;
@@ -98,15 +98,15 @@ class ValidationCard(QFrame):
         """)
 
         button = QPushButton("Detalhes")
-        button.setFixedWidth(90)
-        button.setFixedHeight(28)
+        button.setFixedWidth(92)
+        button.setFixedHeight(30)
         button.setCursor(Qt.PointingHandCursor)
         button.setStyleSheet("""
             QPushButton {
                 background-color: #8CC63F;
-                color: white;
+                color: #FFFFFF;
                 border: none;
-                border-radius: 14px;
+                border-radius: 15px;
                 font-size: 12px;
                 font-weight: bold;
             }

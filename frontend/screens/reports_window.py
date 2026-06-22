@@ -87,15 +87,15 @@ class ReportsWindow(QWidget):
         self.status_filter.addItems([
             "Todos",
             "CONFIRMADO",
-            "REPROVADO",
+            "DIVERGENTE",
             "PENDENTE"
         ])
 
-        generate_button = QPushButton("Gerar Relatório")
-        generate_button.clicked.connect(self.apply_filters)
-
-        export_button = QPushButton("⬇ Exportar CSV")
+        export_button = QPushButton("Exportar CSV")
         export_button.clicked.connect(self.export_csv)
+
+        self.search_input.textChanged.connect(self.apply_filters)
+        self.status_filter.currentTextChanged.connect(self.apply_filters)
 
         for field in [self.search_input, self.status_filter]:
             field.setFixedHeight(42)
@@ -107,28 +107,26 @@ class ReportsWindow(QWidget):
                 font-size: 14px;
             """)
 
-        for button in [generate_button, export_button]:
-            button.setFixedHeight(42)
-            button.setCursor(Qt.PointingHandCursor)
-            button.setStyleSheet("""
-                QPushButton {
-                    background-color: #8CC63F;
-                    color: #FFFFFF;
-                    border: none;
-                    border-radius: 10px;
-                    padding: 0 18px;
-                    font-size: 14px;
-                    font-weight: bold;
-                }
+        export_button.setFixedHeight(42)
+        export_button.setCursor(Qt.PointingHandCursor)
+        export_button.setStyleSheet("""
+            QPushButton {
+                background-color: #8CC63F;
+                color: #FFFFFF;
+                border: none;
+                border-radius: 10px;
+                padding: 0 18px;
+                font-size: 14px;
+                font-weight: bold;
+            }
 
-                QPushButton:hover {
-                    background-color: #79B832;
-                }
-            """)
+            QPushButton:hover {
+                background-color: #79B832;
+            }
+        """)
 
         filters_row.addWidget(self.search_input, 2)
         filters_row.addWidget(self.status_filter, 1)
-        filters_row.addWidget(generate_button)
         filters_row.addWidget(export_button)
 
         layout.addWidget(title)
@@ -259,10 +257,10 @@ class ReportsWindow(QWidget):
         self.load_table(filtered)
 
     def export_csv(self):
-        file_path = export_validations_to_csv()
+        file_path = export_validations_to_csv(self.validations)
 
         QMessageBox.information(
             self,
             "Exportação concluída",
-            f"Arquivo gerado:\n\n{file_path}"
+            f"Arquivo gerado em:\n\n{file_path}"
         )

@@ -106,25 +106,86 @@ def get_dashboard_summary():
         SELECT COUNT(*)
         FROM validations
     """)
-
     total = cursor.fetchone()[0]
 
     cursor.execute("""
         SELECT COUNT(*)
         FROM validations
-        WHERE status='FINALIZADO'
+        WHERE status = 'CONFIRMADO'
     """)
+    confirmed = cursor.fetchone()[0]
 
-    finalized = cursor.fetchone()[0]
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM validations
+        WHERE status = 'DIVERGENTE'
+    """)
+    divergent = cursor.fetchone()[0]
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM validations
+        WHERE status = 'PENDENTE'
+    """)
+    pending = cursor.fetchone()[0]
 
     connection.close()
 
     return {
         "total": total,
-        "confirmed": finalized,
-        "divergent": 0,
-        "pending": 0
+        "confirmed": confirmed,
+        "divergent": divergent,
+        "pending": pending
     }
+
+def save_validation_items(validation_id, items):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    for item in items:
+        cursor.execute("""
+            INSERT INTO validation_items (
+                validation_id,
+                parameter,
+                expected,
+                found,
+                status,
+                message
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (
+            validation_id,
+            item["parameter"],
+            item["expected"],
+            item["found"],
+            item["status"],
+            item["message"]
+        ))
+
+    connection.commit()
+    connection.close()
+
+
+def get_validation_items(validation_id):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            parameter,
+            expected,
+            found,
+            status,
+            message
+        FROM validation_items
+        WHERE validation_id = ?
+    """, (validation_id,))
+
+    items = cursor.fetchall()
+
+    connection.close()
+
+    return items
 
 def get_validations_by_operator():
     connection = get_connection()

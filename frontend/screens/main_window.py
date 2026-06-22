@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
         self.user = user
         self.validation_window = None
 
-        self.setWindowTitle("First-Off Landis+Gyr")
+        self.setWindowTitle("ValidaFlow")
         self.resize(1400, 800)
 
         container = QWidget()
@@ -70,7 +70,7 @@ class MainWindow(QMainWindow):
         layout.setContentsMargins(0, 28, 0, 20)
         layout.setSpacing(4)
 
-        logo = QLabel("Automatiza Landis+Gyr")
+        logo = QLabel("ValidaFlow")
         logo.setAlignment(Qt.AlignCenter)
         logo.setStyleSheet("""
             color: #8CC63F;
@@ -80,7 +80,7 @@ class MainWindow(QMainWindow):
             border: none;
         """)
 
-        dashboard_button = QPushButton("▣  Dashboard")
+        dashboard_button = QPushButton("▣  Dashboard ")
         dashboard_button.clicked.connect(self.show_dashboard)
 
         btn_validate = QPushButton("✓  Validar XML")
@@ -144,7 +144,7 @@ class MainWindow(QMainWindow):
         layout = QHBoxLayout(topbar)
         layout.setContentsMargins(30, 0, 30, 0)
 
-        title = QLabel("First-Off Landis+Gyr")
+        title = QLabel("ValidaFlow")
         title.setStyleSheet("""
             color: #222222;
             font-size: 19px;

@@ -40,7 +40,7 @@ class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Login - First-Off Automatiza Landis+Gyr")
+        self.setWindowTitle("Login - ValidaFlow")
         self.resize(1400, 800)
         self.setStyleSheet(LOGIN_STYLE)
         self.main_window = None
@@ -55,24 +55,19 @@ class LoginWindow(QWidget):
         right_layout.setAlignment(Qt.AlignCenter)
         right_layout.setContentsMargins(90, 40, 90, 40)
 
-        logo = QLabel()
+        logo = QLabel("ValidaFlow")
         logo.setAlignment(Qt.AlignCenter)
-
-        logo_pixmap = QPixmap(str(LOGO_PATH))
-        logo.setPixmap(
-            logo_pixmap.scaled(
-                300,
-                140,
-                Qt.KeepAspectRatio,
-                Qt.SmoothTransformation
-            )
-        )
+        logo.setStyleSheet("""
+            color: #8CC63F;
+            font-size: 34px;
+            font-weight: bold;
+        """)
 
         title = QLabel("Sistema de Validação Automática")
         title.setAlignment(Qt.AlignCenter)
         title.setStyleSheet("font-size: 20px; font-weight: bold;")
 
-        subtitle = QLabel("First-Off Landis+Gyr")
+        subtitle = QLabel("Sistema de Validação Assistida First-Off")
         subtitle.setAlignment(Qt.AlignCenter)
         subtitle.setStyleSheet("font-size: 15px; color: #666666;")
 

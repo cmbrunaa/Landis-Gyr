@@ -62,16 +62,24 @@ def validate_parameters(xml_data):
     total = len(results)
 
     conformity = round(
-        (confirmed / total) * 100,
-        0
+    (confirmed / total) * 100,
+    0
     ) if total else 0
 
+    if divergent > 0:
+        final_status = "DIVERGENTE"
+    elif pending > 0:
+        final_status = "PENDENTE"
+    else:
+        final_status = "CONFIRMADO"
+
     return {
-        "results": results,
-        "divergences": divergences,
-        "confirmed": confirmed,
-        "pending": pending,
-        "divergent": divergent,
-        "total": total,
-        "conformity": conformity
-    }
+    "results": results,
+    "divergences": divergences,
+    "confirmed": confirmed,
+    "pending": pending,
+    "divergent": divergent,
+    "total": total,
+    "conformity": conformity,
+    "final_status": final_status
+}
