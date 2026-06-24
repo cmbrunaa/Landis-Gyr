@@ -12,10 +12,11 @@ from frontend.screens.users_window import UsersWindow
 
 from database.validation_repository import (
     get_dashboard_summary,
+    get_dashboard_summary_by_operator,
     get_validations,
     get_validations_by_operator,
+    get_validations_by_operator_name,
 )
-
 
 class MainWindow(QMainWindow):
     def __init__(self, user):
@@ -161,11 +162,43 @@ class MainWindow(QMainWindow):
             border: none;
         """)
 
+        logout_button = QPushButton("Sair")
+
+        logout_button.setCursor(Qt.PointingHandCursor)
+        logout_button.setFixedHeight(36)
+
+        logout_button.setStyleSheet("""
+            QPushButton {
+                background-color: #DC2626;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 0 16px;
+                font-weight: bold;
+            }
+
+        QPushButton:hover {
+            background-color: #B91C1C;
+        }
+        """)
+
+        logout_button.clicked.connect(self.logout)
+
         layout.addWidget(title)
         layout.addStretch()
+        layout.addWidget(logout_button)
+        layout.addSpacing(10)
         layout.addWidget(user_info)
 
         return topbar
+    
+    def logout(self):
+        from frontend.screens.login_window import LoginWindow
+
+        self.login_window = LoginWindow()
+        self.login_window.show()
+
+        self.close()
 
     def show_dashboard(self):
         self.replace_content(self.create_dashboard_content())
@@ -203,7 +236,10 @@ class MainWindow(QMainWindow):
             border: none;
         """)
 
-        summary = get_dashboard_summary()
+        if self.user["role"] == "GESTOR":
+            summary = get_dashboard_summary()
+        else:
+            summary = get_dashboard_summary_by_operator(self.user["name"])
 
         cards_layout = QHBoxLayout()
         cards_layout.setSpacing(18)
@@ -217,7 +253,9 @@ class MainWindow(QMainWindow):
         bottom_layout.setSpacing(18)
 
         bottom_layout.addWidget(self.create_latest_validations_panel(), 2)
-        bottom_layout.addWidget(self.create_operators_panel(), 1)
+
+        if self.user["role"] == "GESTOR":
+            bottom_layout.addWidget(self.create_operators_panel(), 1)
 
         layout.addWidget(page_title)
         layout.addWidget(subtitle)
@@ -313,7 +351,10 @@ class MainWindow(QMainWindow):
         table.setColumnCount(5)
         table.setHorizontalHeaderLabels(["ID", "Status", "Modelo", "Operador", "Data"])
 
-        validations = get_validations()[:6]
+        if self.user["role"] == "GESTOR":
+            validations = get_validations()[:6]
+        else:
+            validations = get_validations_by_operator_name(self.user["name"])[:6]
         table.setRowCount(len(validations))
 
         for row, item in enumerate(validations):

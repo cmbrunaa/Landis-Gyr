@@ -44,7 +44,7 @@ class ValidationDetailsDialog(QDialog):
         operator_name = validation[4]
         created_at = validation[5]
 
-        status_color = self.get_status_color(status)
+        status_color, status_bg = self.get_status_style(status)
 
         header_layout = QHBoxLayout()
 
@@ -74,7 +74,7 @@ class ValidationDetailsDialog(QDialog):
         status_label.setFixedHeight(32)
         status_label.setMinimumWidth(130)
         status_label.setStyleSheet(f"""
-            background-color: {status_color}22;
+            background-color: {status_bg};
             color: {status_color};
             border-radius: 16px;
             padding: 0 14px;
@@ -205,14 +205,18 @@ class ValidationDetailsDialog(QDialog):
         layout.addWidget(scroll, 1)
         layout.addWidget(close_button)
 
-    def get_status_color(self, status):
+    def get_status_style(self, status):
         if status == "DIVERGENTE":
-            return "#DC2626"
+            return "#DC2626", "#FEF2F2"
 
         if status == "PENDENTE":
-            return "#D97706"
+            return "#D97706", "#FEF3C7"
 
-        return "#16A34A"
+        return "#16A34A", "#ECFDF3"
+
+    def get_status_color(self, status):
+        color, _ = self.get_status_style(status)
+        return color
 
     def create_info_box(self, title, value):
         box = QFrame()
@@ -257,7 +261,7 @@ class ValidationDetailsDialog(QDialog):
         item_status = item[3]
         message = item[4]
 
-        color = self.get_status_color(item_status)
+        color, background = self.get_status_style(item_status)
 
         card = QFrame()
         card.setStyleSheet(f"""
@@ -288,7 +292,7 @@ class ValidationDetailsDialog(QDialog):
         status_label.setFixedHeight(26)
         status_label.setMinimumWidth(110)
         status_label.setStyleSheet(f"""
-            background-color: {color}22;
+            background-color: {background};
             color: {color};
             border-radius: 13px;
             padding: 0 10px;
@@ -301,11 +305,15 @@ class ValidationDetailsDialog(QDialog):
         header.addStretch()
         header.addWidget(status_label)
 
-        details = QLabel(
-            f"Esperado: {expected}\n"
-            f"Encontrado: {found}\n"
-            f"Mensagem: {message}"
+        details_text = (
+        f"Esperado: {expected}\n"
+        f"Encontrado: {found}"
         )
+
+        if item_status != "CONFIRMADO":
+            details_text += f"\nMensagem: {message}"
+
+        details = QLabel(details_text)
         details.setStyleSheet("""
             color: #374151;
             font-size: 13px;

@@ -205,3 +205,71 @@ def get_validations_by_operator():
     connection.close()
 
     return data
+
+def get_validations_by_operator_name(operator_name):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            id,
+            status,
+            meter_model,
+            meter_type,
+            operator_name,
+            created_at
+        FROM validations
+        WHERE operator_name = ?
+        ORDER BY id DESC
+    """, (operator_name,))
+
+    validations = cursor.fetchall()
+
+    connection.close()
+
+    return validations
+
+
+def get_dashboard_summary_by_operator(operator_name):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM validations
+        WHERE operator_name = ?
+    """, (operator_name,))
+    total = cursor.fetchone()[0]
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM validations
+        WHERE operator_name = ?
+        AND status = 'CONFIRMADO'
+    """, (operator_name,))
+    confirmed = cursor.fetchone()[0]
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM validations
+        WHERE operator_name = ?
+        AND status = 'DIVERGENTE'
+    """, (operator_name,))
+    divergent = cursor.fetchone()[0]
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM validations
+        WHERE operator_name = ?
+        AND status = 'PENDENTE'
+    """, (operator_name,))
+    pending = cursor.fetchone()[0]
+
+    connection.close()
+
+    return {
+        "total": total,
+        "confirmed": confirmed,
+        "divergent": divergent,
+        "pending": pending
+    }

@@ -12,8 +12,10 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import Qt
 
 from frontend.widgets.validation_card import ValidationCard
-from database.validation_repository import get_validations
-
+from database.validation_repository import (
+    get_validations,
+    get_validations_by_operator_name
+)
 
 class HistoryWindow(QWidget):
 
@@ -133,7 +135,6 @@ class HistoryWindow(QWidget):
             ["Todos", "CONFIRMADO", "DIVERGENTE", "PENDENTE"]
         )
         self.status_filter.setFixedHeight(44)
-        clear_button.setFixedHeight(44)
         self.status_filter.setFixedWidth(160)
         self.status_filter.setStyleSheet("""
             QComboBox {
@@ -181,7 +182,13 @@ class HistoryWindow(QWidget):
         return panel
 
     def reload_data(self):
-        self.all_validations = get_validations()
+        if self.parent_window.user["role"] == "GESTOR":
+            self.all_validations = get_validations()
+        else:
+            self.all_validations = get_validations_by_operator_name(
+            self.parent_window.user["name"]
+        )
+
         self.render_cards()
 
     def clear_filters(self):
